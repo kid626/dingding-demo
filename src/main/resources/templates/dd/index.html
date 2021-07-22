@@ -22,7 +22,9 @@
     <h2>解析url,获取的corpId:</h2>
     <p id="corpId"></p>
     <br>
-    <h2>获取的code:</h2>
+    <h2>扫码登录获取的 code:</h2>
+    <p id="qrCode"></p>
+    <h2>dd.requestAuthCode 获取的code:</h2>
     <p id="code"></p>
     <br>
     <h2>请求服务端,登录返回的结果:</h2>
@@ -36,33 +38,58 @@
 </body>
 
 <script type="text/javascript">
-    //获取当前网页的url
-    let currentUrl = document.location.toString()
     // 解析url中包含的corpId
-    let corpId = currentUrl.split("corpid=")[1];
+    let corpId = getQueryString("corpid");
+    // 解析url中包含的code
+    let code = getQueryString("code");
     $("#corpId").append(corpId)
-    // 钉钉sdk 初始化
-    // dd.ready参数为回调函数，在环境准备就绪时触发，jsapi的调用需要保证在该回调函数触发后调用，否则无效。
-    dd.ready(function () {
-        //使用SDK 获取免登授权码
-        dd.runtime.permission.requestAuthCode({
-            corpId: corpId,
-            onSuccess: function (result) {
-                let code = result.code;
-                $("#code").append(code)
-                // 请求我们服务端的登陆地址，注意不能使用 localhost,也可以通过内网穿透工具换成任意域名
-                $.get("http://bruce.vaiwan.com/user/dd/authCode/" + code, response => {
-                    // 我们服务器返回的信息
-                    // 下面代码主要是将返回结果显示出来，可以根据自己的数据结构随便写
-                    for (let item in response) {
-                        if (response[item]) {
-                            $("#result").append("<tr><td>" + item + "</td><td>" + response[item] + "</td></tr>")
-                        }
-                    }
-                });
+    $("#qrCode").append(code)
+    // code 不为空，则代表扫码过来(不能排除是手动故意添加 code)
+    if (code) {
+        $.get("http://bruce.vaiwan.com/user/dd/qr/authCode/" + code, response => {
+            // 我们服务器返回的信息
+            // 下面代码主要是将返回结果显示出来，可以根据自己的数据结构随便写
+            for (let item in response) {
+                if (response[item]) {
+                    $("#result").append("<tr><td>" + item + "</td><td>" + response[item] + "</td></tr>")
+                }
             }
         });
-    });
+    } else {
+        // code 为空，那默认走钉钉免登
+        // 钉钉sdk 初始化
+        // dd.ready参数为回调函数，在环境准备就绪时触发，jsapi的调用需要保证在该回调函数触发后调用，否则无效。
+        dd.ready(function () {
+            //使用SDK 获取免登授权码
+            dd.runtime.permission.requestAuthCode({
+                corpId: corpId,
+                onSuccess: function (result) {
+                    let code = result.code;
+                    $("#code").append(code)
+                    // 请求我们服务端的登陆地址，注意不能使用 localhost,也可以通过内网穿透工具换成任意域名
+                    $.get("http://bruce.vaiwan.com/user/dd/authCode/" + code, response => {
+                        // 我们服务器返回的信息
+                        // 下面代码主要是将返回结果显示出来，可以根据自己的数据结构随便写
+                        for (let item in response) {
+                            if (response[item]) {
+                                $("#result").append("<tr><td>" + item + "</td><td>" + response[item] + "</td></tr>")
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    function getQueryString(name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        let r = window.location.search.substr(1).match(reg);
+        if (r != null) {
+            return decodeURIComponent(r[2]);
+        }
+        return null;
+    }
+
 </script>
 
 </html>

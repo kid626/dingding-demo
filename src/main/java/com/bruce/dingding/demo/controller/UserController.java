@@ -45,4 +45,16 @@ public class UserController {
         return userService.authCode(code);
     }
 
+    @GetMapping("/dd/qr/authCode/{code}")
+    public UserModel ddAuthCodeByQrCode(@PathVariable("code") String code) {
+        userService = new DdUserServiceImpl(dingConfig);
+        return userService.authCodeByQrCode(code);
+    }
+
+    @GetMapping("/zzd/qr/authCode/{code}")
+    public UserModel zzdAuthCodeByQrCode(@PathVariable("code") String code) {
+        userService = new ZzdUserServiceImpl(zzdConfig);
+        return userService.authCodeByQrCode(code);
+    }
+
 }

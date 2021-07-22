@@ -94,4 +94,9 @@ public class ZzdUserServiceImpl implements UserService {
             return "";
         }
     }
+
+    @Override
+    public UserModel authCodeByQrCode(String code) {
+        return null;
+    }
 }

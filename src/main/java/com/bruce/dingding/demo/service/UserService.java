@@ -26,4 +26,12 @@ public interface UserService {
      */
     String getAccessToken();
 
+    /**
+     * 扫码登录鉴权
+     *
+     * @param code 扫码登录鉴权码
+     * @return UserModel
+     */
+    UserModel authCodeByQrCode(String code);
+
 }

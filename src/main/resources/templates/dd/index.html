@@ -48,7 +48,7 @@
                 let code = result.code;
                 $("#code").append(code)
                 // 请求我们服务端的登陆地址，注意不能使用 localhost,也可以通过内网穿透工具换成任意域名
-                $.get("http://192.168.20.30:9001/user/dd/authCode/" + code, response => {
+                $.get("http://bruce.vaiwan.com/user/dd/authCode/" + code, response => {
                     // 我们服务器返回的信息
                     // 下面代码主要是将返回结果显示出来，可以根据自己的数据结构随便写
                     for (let item in response) {

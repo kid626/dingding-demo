@@ -17,16 +17,21 @@
 
 <body>
 <div>
-    <h1>你好浙政钉!</h1>
+    <h1>hello 浙政钉!</h1>
     <br>
-    <p>获取的corpID:</p>
+    <h2>corpId:</h2>
     <p id="corpId"></p>
     <br>
-    <p>获取的code:</p>
+    <h2>获取的code:</h2>
     <p id="code"></p>
     <br>
-    <p>请求我们服务端,登录返回的结果:</p>
-    <p id="result"></p>
+    <h2>请求服务端,登录返回的结果:</h2>
+    <table border="1" id="result">
+        <tr>
+            <th>name</th>
+            <th>value</th>
+        </tr>
+    </table>
 </div>
 </body>
 
@@ -49,11 +54,8 @@
                 // 我们服务器返回的信息
                 // 下面代码主要是将返回结果显示出来，可以根据自己的数据结构随便写
                 for (let item in response) {
-                    $("#result").append("<li>" + item + ":" + response[item] + "</li>")
-                }
-                if (response.user) {
-                    for (item in response.user) {
-                        $("#result").append("<li>\t[user 属性] " + item + " : " + response.user[item] + "</li>")
+                    if (response[item]) {
+                        $("#result").append("<tr><td>" + item + "</td><td>" + response[item] + "</td></tr>")
                     }
                 }
             });

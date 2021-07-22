@@ -96,6 +96,9 @@ public class ZzdUserServiceImpl implements UserService {
         }
     }
 
+    /**
+     * https://login.dg-work.cn/oauth2/auth.htm?response_type=code&client_id=应用标识&redirect_uri=回调地址&scope=get_user_info&authType=QRCODE
+     */
     @Override
     public UserModel authCodeByQrCode(String code) {
         log.info("浙政钉扫码鉴权,code={}", code);

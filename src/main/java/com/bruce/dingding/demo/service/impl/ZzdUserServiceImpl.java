@@ -23,6 +23,7 @@ public class ZzdUserServiceImpl implements UserService {
 
     private static final String GET_TOKEN_URL = "/gettoken.json";
     private static final String GET_USER_INFO_URL = "/rpc/oauth2/dingtalk_app_user.json";
+    private static final String GET_TOKEN_BY_QRCODE_URL = "/rpc/oauth2/getuserinfo_bycode.json";
 
     private final ZzdConfig config;
 
@@ -97,6 +98,35 @@ public class ZzdUserServiceImpl implements UserService {
 
     @Override
     public UserModel authCodeByQrCode(String code) {
-        return null;
+        log.info("浙政钉扫码鉴权,code={}", code);
+        try {
+            ExecutableClient executableClient = ExecutableClient.getInstance();
+            executableClient.setAccessKey(config.getAppKey());
+            executableClient.setSecretKey(config.getAppSecret());
+            executableClient.setDomainName(config.getDomainName());
+            executableClient.setProtocal("https");
+            executableClient.init();
+            PostClient postClient = executableClient.newPostClient(GET_TOKEN_BY_QRCODE_URL);
+            postClient.addParameter("access_token", getAccessToken());
+            postClient.addParameter("code", code);
+            String apiResult = postClient.post();
+            log.info("浙政钉扫码鉴权返回:response={}", apiResult);
+            AuthUserResp response = JSONObject.parseObject(apiResult, AuthUserResp.class);
+            if (!response.isSuccess()) {
+                throw new DdException(response.getContent().getResponseMessage());
+            }
+            if (!response.getContent().isSuccess()) {
+                throw new DdException(response.getContent().getResponseMessage());
+            }
+            AuthUserResp.ContentBean.DataBean userInfo = response.getContent().getData();
+            UserModel model = new UserModel();
+            model.setName(userInfo.getLastName());
+            model.setId(String.valueOf(userInfo.getAccountId()));
+            model.setOrgName(userInfo.getRealmName());
+            return model;
+        } catch (Exception e) {
+            log.info("浙政钉扫码鉴权出错", e);
+            throw new DdException(e);
+        }
     }
 }

@@ -16,19 +16,18 @@
 </head>
 
 <body>
-<div>
-    <h1>hello 浙政钉!</h1>
-    <br>
-    <h2>corpId:</h2>
+<div style="border: 1px solid lightgreen;">
+    <h1 id="title">你好,浙政钉</h1>
+</div>
+<div style="border: 1px solid lightgreen;">
+    <p>corpId:</p>
     <p id="corpId"></p>
-    <br>
-    <h2>扫码登录获取的 code:</h2>
+    <p>扫码登录获取code:</p>
     <p id="qrCode"></p>
-    <br>
-    <h2>dd.getAuthCode 获取的 code:</h2>
+    <p>dd.getAuthCode:</p>
     <p id="code"></p>
-    <br>
-    <h2>请求服务端,登录返回的结果:</h2>
+</div>
+<div style="border: 1px solid lightgreen;">
     <table border="1" id="result">
         <tr>
             <th>name</th>
@@ -54,6 +53,7 @@
                     $("#result").append("<tr><td>" + item + "</td><td>" + response[item] + "</td></tr>")
                 }
             }
+            $("#title").html("你好," + response["name"])
         });
     } else {
         // code 为空，那默认走浙政钉免登
@@ -76,6 +76,7 @@
                             $("#result").append("<tr><td>" + item + "</td><td>" + response[item] + "</td></tr>")
                         }
                     }
+                    $("#title").html("你好," + response["name"])
                 });
             })
         });

@@ -8,6 +8,7 @@ import com.bruce.dingding.demo.exception.DdException;
 import com.bruce.dingding.demo.model.UserModel;
 import com.bruce.dingding.demo.model.resp.AuthUserResp;
 import com.bruce.dingding.demo.model.resp.GetTokenResp;
+import com.bruce.dingding.demo.model.resp.JsapiTokenResp;
 import com.bruce.dingding.demo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +25,8 @@ public class ZzdUserServiceImpl implements UserService {
     private static final String GET_TOKEN_URL = "/gettoken.json";
     private static final String GET_USER_INFO_URL = "/rpc/oauth2/dingtalk_app_user.json";
     private static final String GET_TOKEN_BY_QRCODE_URL = "/rpc/oauth2/getuserinfo_bycode.json";
+    private static final String GET_JSAPI_TOKEN_URL = "/get_jsapi_token.json";
+
 
     private final ZzdConfig config;
 
@@ -130,6 +133,34 @@ public class ZzdUserServiceImpl implements UserService {
         } catch (Exception e) {
             log.info("浙政钉扫码鉴权出错", e);
             throw new DdException(e);
+        }
+    }
+
+    @Override
+    public String getJsapiToken() {
+        log.info("获取 jsapi 票据");
+        try {
+            ExecutableClient executableClient = ExecutableClient.getInstance();
+            executableClient.setAccessKey(config.getAppKey());
+            executableClient.setSecretKey(config.getAppSecret());
+            executableClient.setDomainName(config.getDomainName());
+            executableClient.setProtocal("https");
+            executableClient.init();
+            PostClient postClient = executableClient.newPostClient(GET_JSAPI_TOKEN_URL);
+            postClient.addParameter("accessToken", getAccessToken());
+            String apiResult = postClient.post();
+            log.info("获取 jsapi token :{}", apiResult);
+            JsapiTokenResp result = JSONObject.parseObject(apiResult, JsapiTokenResp.class);
+            if (!result.isSuccess()) {
+                throw new DdException(result.getContent().getResponseMessage());
+            }
+            if (!result.getContent().isSuccess()) {
+                throw new DdException(result.getContent().getResponseMessage());
+            }
+            return result.getContent().getData().getAccessToken();
+        } catch (Exception e) {
+            log.warn("获取 jsapi 票据 出错", e);
+            return "";
         }
     }
 }

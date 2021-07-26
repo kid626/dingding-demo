@@ -57,4 +57,11 @@ public class UserController {
         return userService.authCodeByQrCode(code);
     }
 
+    @GetMapping("/dd/jsapi/token")
+    public String ddGetJsapiToken() {
+        userService = new DdUserServiceImpl(dingConfig);
+        return userService.getJsapiToken();
+    }
+
+
 }

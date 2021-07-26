@@ -34,4 +34,11 @@ public interface UserService {
      */
     UserModel authCodeByQrCode(String code);
 
+    /**
+     * 获取 jsapi 票据
+     *
+     * @return ticket
+     */
+    String getJsapiToken();
+
 }

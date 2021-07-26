@@ -104,6 +104,11 @@ public class DdUserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public String getJsapiToken() {
+        return null;
+    }
+
     /**
      * 根据 userId 换取用户信息
      */

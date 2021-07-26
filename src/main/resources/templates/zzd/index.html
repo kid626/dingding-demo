@@ -28,6 +28,14 @@
     <p id="code"></p>
 </div>
 <div style="border: 1px solid lightgreen;">
+    <table border="1" id="dd_result">
+        <tr>
+            <th>name</th>
+            <th>value</th>
+        </tr>
+    </table>
+</div>
+<div style="border: 1px solid lightgreen;">
     <table border="1" id="result">
         <tr>
             <th>name</th>
@@ -64,7 +72,15 @@
             dd.getAuthCode({
                 corpId: corpId
             }).then(res => {
+                for (let item in res) {
+                    if (res[item]) {
+                        $("#dd_result").append("<tr><td>" + item + "</td><td>" + res[item] + "</td></tr>")
+                    }
+                }
                 let code = res.code;
+                if (code === undefined) {
+                    code = res.auth_code
+                }
                 $("#code").append(code)
 
                 // 请求我们服务端的登陆地址，注意不能使用 localhost,也可以通过内网穿透工具换成任意域名

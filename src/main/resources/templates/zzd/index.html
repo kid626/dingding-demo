@@ -12,6 +12,7 @@
     <script src="https://g.alicdn.com/gdt/jsapi/1.9.6/index.js"></script>
     <script src="/js/jquery.min.js"></script>
     <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.0.0/core.js"></script>
+    <script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script>
 
 </head>
 
@@ -47,6 +48,7 @@
 
 <script type="text/javascript">
     // 浙政钉暂时不支持从 url 中获取，测试发现，无需传这个参数也可以获取 code
+    let vConsole = new VConsole()
     let corpId = ""
     let code = getQueryString("code")
     $("#corpId").append(corpId)
@@ -68,7 +70,16 @@
         // 浙政钉sdk 初始化
         // dd.ready参数为回调函数，在环境准备就绪时触发，jsapi的调用需要保证在该回调函数触发后调用，否则无效。
         dd.ready(function () {
-            //使用SDK 获取免登授权码
+            const tc = dd.on("titleClick", function () {
+                console.info("监听到点击标题事件")
+                alert("titleClick")
+            })
+            const bk = dd.on("back", function () {
+                console.info("监听到回退事件")
+                alert("back")
+            })
+            // 使用SDK
+            // 获取免登授权码
             dd.getAuthCode({
                 corpId: corpId
             }).then(res => {

@@ -7,8 +7,9 @@ demo:
   zzd:
     appKey: ""
     appSecret: ""
-    corpId:
+    tenandId:
     domainName: "openplatform.dg-work.cn"
+    protocol: "https"
 server:
   port: 9001
 

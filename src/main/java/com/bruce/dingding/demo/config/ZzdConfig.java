@@ -19,6 +19,7 @@ public class ZzdConfig {
     private String appKey;
     private String appSecret;
     private String domainName;
-    private Long corpId;
+    private String protocol = "https";
+    private Long tenantId;
 
 }

@@ -5,6 +5,8 @@ target/
 !**/src/test/**/target/
 **/application-dev.yml
 TOKEN/
+DING_TOKEN/
+
 ### STS ###
 .apt_generated
 .classpath

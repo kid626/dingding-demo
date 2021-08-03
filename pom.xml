@@ -103,10 +103,17 @@
         </dependency>
         <dependency>
             <groupId>com.bruce</groupId>
+            <artifactId>taobao-sdk</artifactId>
+            <version>20210716</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/taobao-sdk-java-auto_1479188381469-20210716.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>com.bruce</groupId>
             <artifactId>dingding-sdk</artifactId>
             <version>1.0.0</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/taobao-sdk-java-auto_1479188381469-20210716.jar</systemPath>
+            <systemPath>${project.basedir}/libs/dingding-sdk-java-1.0.0.jar</systemPath>
         </dependency>
     </dependencies>
 

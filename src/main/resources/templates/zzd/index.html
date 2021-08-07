@@ -27,6 +27,7 @@
     <p id="qrCode"></p>
     <p>dd.getAuthCode:</p>
     <p id="code"></p>
+    <button onclick="ding()">ding一下</button>
 </div>
 <div style="border: 1px solid lightgreen;">
     <table border="1" id="dd_result">
@@ -51,6 +52,13 @@
     let vConsole = new VConsole()
     let corpId = ""
     let code = getQueryString("code")
+    let jsapi_token = ""
+    $.get("http://bruce.vaiwan.com/user/zzd/jsapi/token", response => {
+        // 我们服务器返回的信息
+        // 下面代码主要是将返回结果显示出来，可以根据自己的数据结构随便写
+        jsapi_token = response
+        console.info("ticket", jsapi_token)
+    });
     $("#corpId").append(corpId)
     $("#qrCode").append(code)
     if (code) {
@@ -117,6 +125,24 @@
             return decodeURIComponent(r[2]);
         }
         return null;
+    }
+
+    function ding(){
+        dd.authConfig({
+            ticket: jsapi_token,
+            jsApiList: ["alert", "createDing"]
+        }).then(res => {
+            console.log(res)
+            dd.createDing({
+                users: ["770940"],
+                alertType: 2,
+                text: "ding"
+            }).then(res => {
+                console.log(res)
+            }).catch(err => {
+            })
+        }).catch(err => {
+        })
     }
 
 </script>

@@ -63,5 +63,11 @@ public class UserController {
         return userService.getJsapiToken();
     }
 
+    @GetMapping("/zzd/jsapi/token")
+    public String zzdGetJsapiToken() {
+        userService = new ZzdUserServiceImpl(zzdConfig);
+        return userService.getJsapiToken();
+    }
+
 
 }
